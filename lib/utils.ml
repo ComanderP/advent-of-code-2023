@@ -54,9 +54,12 @@ let string_of_day = function
   | D24 -> "24"
   | D25 -> "25"
 
-type file = Input | Example
+type file = Input | Example1 | Example2
 
-let string_of_file = function Input -> "input" | Example -> "example"
+let string_of_file = function
+  | Input -> "input"
+  | Example1 -> "ex1"
+  | Example2 -> "ex2"
 
 let get_input day file =
   let input_file =
@@ -64,8 +67,14 @@ let get_input day file =
   in
   In_channel.read_lines input_file
 
-let test day parse solve expected =
-  let solution = get_input day Example |> parse |> solve in
+let test1 day parse solve expected =
+  let solution = get_input day Example1 |> parse |> solve in
+  if solution <> expected then
+    Printf.printf "Test failed, expected %s, got %s\n" expected solution
+  else Printf.printf "Test passed, got %s\n" solution
+
+let test2 day parse solve expected =
+  let solution = get_input day Example2 |> parse |> solve in
   if solution <> expected then
     Printf.printf "Test failed, expected %s, got %s\n" expected solution
   else Printf.printf "Test passed, got %s\n" solution
