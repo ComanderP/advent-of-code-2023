@@ -2,58 +2,99 @@ open Utils
 
 let day = D1
 
-(* Solution *)
+(*****************************************************************************)
+(*                               SOLUTION                                    *)
+(*****************************************************************************)
+
 let solve input : string = List.fold_left ( + ) 0 input |> string_of_int
 
-let explode s =
-  let rec expl i l = if i < 0 then l else expl (i - 1) (s.[i] :: l) in
-  expl (String.length s - 1) []
+(*****************************************************************************)
+(*                            INPUT PROCESSING                               *)
+(*****************************************************************************)
 
+(** Check if a char is a digit *)
+let is_digit (c : char) : bool = match c with '0' .. '9' -> true | _ -> false
+
+(** Convert a string to a list of chars *)
+let explode s = List.init (String.length s) (fun i -> s.[i])
+
+(** Convert a list of chars to a string *)
+let implode l = String.of_seq (List.to_seq l)
+
+let assoc =
+  [
+    ("one", '1');
+    ("two", '2');
+    ("three", '3');
+    ("four", '4');
+    ("five", '5');
+    ("six", '6');
+    ("seven", '7');
+    ("eight", '8');
+    ("nine", '9');
+    ("zero", '0');
+  ]
+
+let prefixes =
+  [
+    "one";
+    "two";
+    "three";
+    "four";
+    "five";
+    "six";
+    "seven";
+    "eight";
+    "nine";
+    "zero";
+  ]
+
+(** Get the numbers in a line *)
 let get_numbers line =
-  let open Core in
-  let rec get_numbers' line' acc i =
-    match line' with
+  let rec get_numbers' line acc =
+    match line with
     | [] -> acc
     | hd :: tl ->
-        if Char.is_digit hd then get_numbers' tl (hd :: acc) (i + 1)
-        else if String.is_substring_at line ~pos:i ~substring:"one" then
-          get_numbers' tl (Char.of_string "1" :: acc) (i + 1)
-        else if String.is_substring_at line ~pos:i ~substring:"two" then
-          get_numbers' tl (Char.of_string "2" :: acc) (i + 1)
-        else if String.is_substring_at line ~pos:i ~substring:"three" then
-          get_numbers' tl (Char.of_string "3" :: acc) (i + 1)
-        else if String.is_substring_at line ~pos:i ~substring:"four" then
-          get_numbers' tl (Char.of_string "4" :: acc) (i + 1)
-        else if String.is_substring_at line ~pos:i ~substring:"five" then
-          get_numbers' tl (Char.of_string "5" :: acc) (i + 1)
-        else if String.is_substring_at line ~pos:i ~substring:"six" then
-          get_numbers' tl (Char.of_string "6" :: acc) (i + 1)
-        else if String.is_substring_at line ~pos:i ~substring:"seven" then
-          get_numbers' tl (Char.of_string "7" :: acc) (i + 1)
-        else if String.is_substring_at line ~pos:i ~substring:"eight" then
-          get_numbers' tl (Char.of_string "8" :: acc) (i + 1)
-        else if String.is_substring_at line ~pos:i ~substring:"nine" then
-          get_numbers' tl (Char.of_string "9" :: acc) (i + 1)
-        else if String.is_substring_at line ~pos:i ~substring:"zero" then
-          get_numbers' tl (Char.of_string "0" :: acc) (i + 1)
-        else get_numbers' tl acc (i + 1)
+        (* If digit, add to acc *)
+        if is_digit hd then get_numbers' tl (hd :: acc)
+          (* Else, check if it's a prefix *)
+        else
+          let line_str = implode line in
+          let rec find_prefixes prefixes acc =
+            match prefixes with
+            | [] -> get_numbers' tl acc
+            | prefix :: rest ->
+                if String.starts_with ~prefix line_str then
+                  get_numbers' tl (List.assoc prefix assoc :: acc)
+                else find_prefixes rest acc
+          in
+          find_prefixes prefixes acc
   in
-  List.rev (get_numbers' (explode line) [] 0)
+  List.rev (get_numbers' (explode line) [])
 
-(* Input parsing *)
 let parse (lines : string list) =
-  let open Core in
-  let numbers = Array.create ~len:(List.length lines) "" in
+  let numbers = Array.make (List.length lines) "" in
   for i = 0 to List.length lines - 1 do
-    let line = List.nth lines i |> Option.value_exn in
-
+    let line = List.nth lines i in
     let numbers' = get_numbers line in
-
-    let first = List.hd_exn numbers' in
-    let last = List.last_exn numbers' in
-    numbers.(i) <- Char.to_string first ^ Char.to_string last
+    let first = List.hd numbers' in
+    let last = List.rev numbers' |> List.hd in
+    numbers.(i) <- Char.escaped first ^ Char.escaped last
   done;
-  Array.to_list numbers |> List.map ~f:int_of_string
+  Array.to_list numbers |> List.map int_of_string
+
+(*****************************************************************************)
+(*                             NO IMPERATIVE                                 *)
+(*****************************************************************************)
+
+let parse' (lines : string list) =
+  let numbers = List.map get_numbers lines in
+  List.map
+    (fun numbers' ->
+      let first = List.hd numbers' in
+      let last = List.rev numbers' |> List.hd in
+      int_of_string @@ Char.escaped first ^ Char.escaped last)
+    numbers
 
 (* Main function to read input and run the solution *)
 let () =
