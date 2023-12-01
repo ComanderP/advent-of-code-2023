@@ -30,3 +30,4 @@ _opam/
 
 # AOC Tiles
 _tiles/
+.pre-commit-config.yaml
