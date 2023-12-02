@@ -39,9 +39,9 @@ let group line : (int * string) list =
 
 let parse (lines : string list) =
   map (String.split_on_char ':') lines
-  |> map (fun x -> List.rev x |> List.hd)
+  |> map (fun x -> rev x |> hd)
   |> map (split_on_chars [ ' '; ','; ';' ])
-  |> map (List.filter (fun s -> s <> ""))
+  |> map (filter (fun s -> s <> ""))
   |> map group
 
 (* Main function to read input and run the solution *)
