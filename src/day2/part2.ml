@@ -33,7 +33,7 @@ let group line : (int * string) list =
     | n :: c :: tl -> aux ((int_of_string n, c) :: acc) tl
     | _ -> acc
   in
-  List.rev (aux [] line)
+  rev (aux [] line)
 
 let parse (lines : string list) =
   map (String.split_on_char ':') lines
