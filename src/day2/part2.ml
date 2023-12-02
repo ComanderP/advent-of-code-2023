@@ -1,4 +1,5 @@
 open Utils
+open List
 
 let day = D2
 
@@ -19,13 +20,14 @@ let minimum_amounts game : int * int * int =
   aux 0 0 0 game
 
 let solve input : string =
-  List.map (fun game -> minimum_amounts game) input
-  |> List.map (fun (r, g, b) -> r * g * b)
-  |> List.fold_left ( + ) 0 |> string_of_int
+  map (fun game -> minimum_amounts game) input
+  |> map (fun (r, g, b) -> r * g * b)
+  |> fold_left ( + ) 0 |> string_of_int
 
 (*****************************************************************************)
 (*                            INPUT PROCESSING                               *)
 (*****************************************************************************)
+
 let group line : (int * string) list =
   let rec aux acc = function
     | n :: c :: tl -> aux ((int_of_string n, c) :: acc) tl
@@ -34,11 +36,11 @@ let group line : (int * string) list =
   List.rev (aux [] line)
 
 let parse (lines : string list) =
-  List.map (String.split_on_char ':') lines
-  |> List.map (fun x -> List.rev x |> List.hd)
-  |> List.map (Core.String.split_on_chars ~on:[ ' '; ','; ';' ])
-  |> List.map (List.filter (fun s -> s <> ""))
-  |> List.map group
+  map (String.split_on_char ':') lines
+  |> map (fun x -> rev x |> hd)
+  |> map (split_on_chars [ ' '; ','; ';' ])
+  |> map (filter (fun s -> s <> ""))
+  |> map group
 
 (* Main function to read input and run the solution *)
 let () =
