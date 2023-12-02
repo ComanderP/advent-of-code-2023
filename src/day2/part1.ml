@@ -1,4 +1,5 @@
 open Utils
+open List
 
 let day = D2
 
@@ -20,10 +21,10 @@ let is_possible game r g b : bool =
 
 let solve input : string =
   let answer =
-    List.map (fun game -> is_possible game 12 13 14) input
-    |> List.mapi (fun i b -> if b then i + 1 else 0)
+    map (fun game -> is_possible game 12 13 14) input
+    |> mapi (fun i b -> if b then i + 1 else 0)
   in
-  List.fold_left ( + ) 0 answer |> string_of_int
+  fold_left ( + ) 0 answer |> string_of_int
 
 (*****************************************************************************)
 (*                            INPUT PROCESSING                               *)
@@ -34,14 +35,14 @@ let group line : (int * string) list =
     | n :: c :: tl -> aux ((int_of_string n, c) :: acc) tl
     | _ -> acc
   in
-  List.rev (aux [] line)
+  rev (aux [] line)
 
 let parse (lines : string list) =
-  List.map (String.split_on_char ':') lines
-  |> List.map (fun x -> List.rev x |> List.hd)
-  |> List.map (Core.String.split_on_chars ~on:[ ' '; ','; ';' ])
-  |> List.map (List.filter (fun s -> s <> ""))
-  |> List.map group
+  map (String.split_on_char ':') lines
+  |> map (fun x -> List.rev x |> List.hd)
+  |> map (split_on_chars [ ' '; ','; ';' ])
+  |> map (List.filter (fun s -> s <> ""))
+  |> map group
 
 (* Main function to read input and run the solution *)
 let () =

@@ -1,5 +1,3 @@
-module In_channel = Core.In_channel
-
 type day =
   | D1
   | D2
@@ -65,7 +63,7 @@ let get_input day file =
   let input_file =
     "data/day" ^ string_of_day day ^ "/" ^ string_of_file file ^ ".txt"
   in
-  In_channel.read_lines input_file
+  In_channel.with_open_text input_file In_channel.input_lines
 
 let test1 day parse solve expected =
   let solution = get_input day Example1 |> parse |> solve in
@@ -78,3 +76,13 @@ let test2 day parse solve expected =
   if solution <> expected then
     Printf.printf "Test failed, expected %s, got %s\n" expected solution
   else Printf.printf "Test passed, got %s\n" solution
+
+(** [split_on_chars chars str] splits [str] on any of the characters in [chars]. *)
+let split_on_chars chars str =
+  let rec aux acc curr = function
+    | Seq.Nil -> curr :: acc
+    | Seq.Cons (hd, tl) ->
+        if List.mem hd chars then aux (curr :: acc) "" (tl ())
+        else aux acc (curr ^ Char.escaped hd) (tl ())
+  in
+  aux [] "" (String.to_seq str ()) |> List.rev
