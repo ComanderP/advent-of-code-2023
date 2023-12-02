@@ -2,7 +2,7 @@
 
 (name aoc2023)
 
-(generate_opam_files true)
+(generate_opam_files false)
 
 (source
  (github ComanderP/advent-of-code-2023))

@@ -1,14 +1,14 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2023 - 2 ⭐
+  2023 - 4 ⭐
 </h1>
-<a href="bin/day1/part1.ml">
+<a href="src/day1/part1.ml">
   <img src="images/2023/01.png" width="161px">
 </a>
-<a href="bin/day2/part1.ml">
+<a href="src/day2/part1.ml">
   <img src="images/2023/02.png" width="161px">
 </a>
-<a href="bin/day3/part1.ml">
+<a href="src/day3/part1.ml">
   <img src="images/2023/03.png" width="161px">
 </a>
 <!-- AOC TILES END -->
