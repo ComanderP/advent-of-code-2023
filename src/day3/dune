@@ -1,6 +1,6 @@
 (executables
- (names part1 part2)
- (public_names d3p1 d3p2)
+ (names part1 part2 purely_functional)
+ (public_names d3p1 d3p2 d3fp)
  (libraries aoc2023 core)
  (preprocess
   (pps ppx_inline_test))

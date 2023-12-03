@@ -6,6 +6,18 @@ let day = D3
 (*                                SOLUTION                                   *)
 (*****************************************************************************)
 
+let pos (x, y) =
+  [
+    (x + 1, y);
+    (x - 1, y);
+    (x, y + 1);
+    (x, y - 1);
+    (x + 1, y + 1);
+    (x + 1, y - 1);
+    (x - 1, y + 1);
+    (x - 1, y - 1);
+  ]
+
 let get_number (line : char array) (j : int) : int * int list =
   let rec aux j acc =
     if j < 0 || j >= Array.length line || not (is_digit line.(j)) then
@@ -15,25 +27,21 @@ let get_number (line : char array) (j : int) : int * int list =
   aux j ("", [])
 
 let adjacent i j matrix =
-  let rec aux i j stop =
+  let rec aux (i, j) stop =
     match matrix.(i).(j) with
     | c when (not (is_digit c)) && c <> '.' -> true
     | _ when stop -> false
     | _ ->
-        aux (i + 1) j true
-        || aux (i - 1) j true
-        || aux i (j + 1) true
-        || aux i (j - 1) true
-        || aux (i + 1) (j + 1) true
-        || aux (i + 1) (j - 1) true
-        || aux (i - 1) (j + 1) true
-        || aux (i - 1) (j - 1) true
+        List.fold_left
+          (fun acc (i, j) -> acc || aux (i, j) true)
+          false
+          (pos (i, j))
   in
-  aux i j false
+  aux (i, j) false
 
 let solve (input : char array array) : string =
   let was_processed =
-    Array.make_matrix (Array.length input) (Array.length input.(0)) false
+    Array.(make_matrix (length input) (length input.(0)) false)
   in
   let answer = ref 0 in
   Array.iteri
