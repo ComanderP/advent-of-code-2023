@@ -86,3 +86,6 @@ let split_on_chars chars str =
         else aux acc (curr ^ Char.escaped hd) (tl ())
   in
   aux [] "" (String.to_seq str ()) |> List.rev
+
+(** [is_digit c] returns true if [c] is a digit. *)
+let is_digit (c : char) : bool = match c with '0' .. '9' -> true | _ -> false
