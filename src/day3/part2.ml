@@ -6,7 +6,7 @@ let day = D3
 (*                                SOLUTION                                   *)
 (*****************************************************************************)
 
-let pos i j =
+let pos (i, j) =
   [
     (i + 1, j);
     (i - 1, j);
@@ -34,7 +34,8 @@ let adjacent i j matrix =
     | _ ->
         List.fold_left
           (fun acc (i, j) -> acc || aux (i, j) true)
-          false (pos i j)
+          false
+          (pos (i, j))
   in
   aux (i, j) false
 
@@ -44,7 +45,7 @@ let get_star_pos i j matrix =
     | '*' -> (i, j)
     | _ -> aux (List.hd coords) (List.tl coords)
   in
-  aux (i, j) (pos i j)
+  aux (i, j) (pos (i, j))
 
 let solve (input : char array array) : string =
   let was_processed =
