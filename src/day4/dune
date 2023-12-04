@@ -1,0 +1,10 @@
+(executables
+ (names part1 part2)
+ (public_names d4p1 d4p2)
+ (libraries aoc2023 core)
+ (modes byte)
+ (preprocess
+  (pps ppx_inline_test))
+ (flags
+  (:standard -warn-error -A)))
+

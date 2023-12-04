@@ -23,4 +23,6 @@
  (tags
   (aoc "advent of code" 2023 aoc2023)))
 
+(map_workspace_root false)
+
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
