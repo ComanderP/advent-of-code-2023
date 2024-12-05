@@ -1,9 +1,6 @@
 (executables
  (names part1 part2)
  (public_names d5p1 d5p2)
- (libraries aoc2023 core ppx_show.runtime)
- (modes byte)
- (preprocess
-  (pps ppx_inline_test ppx_show))
+ (libraries aoc2023 core)
  (flags
   (:standard -warn-error -A)))
