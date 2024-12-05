@@ -33,3 +33,4 @@ _tiles/
 .pre-commit-config.yaml
 
 .vscode/
+data/
