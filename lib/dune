@@ -1,4 +1,3 @@
 (library
  (name utils)
- (public_name aoc2023)
- (libraries core))
+ (public_name aoc2023))
